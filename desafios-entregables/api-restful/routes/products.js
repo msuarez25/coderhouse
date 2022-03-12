@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-//const upload = require('../middlewares/uploadFiles');
+const upload = require('../middlewares/uploadFiles');
 const router = express.Router();
 const fs = require('fs');
+const { dirname } = require('path');
 const fsp = fs.promises; // usamos el modulo de promesas para asegurarnos que todos los metodos se corren de manera asincrona
 
 router.use(bodyParser.json());
@@ -60,21 +61,22 @@ router
     })();
   })
 
-  .post((req, res) => {
+  .post(upload.single('uploaded_file'), (req, res) => {
     (async () => {
       try {
         const products = await getProducts();
         const lastProd = products.at(-1);
         const newProdId = parseInt(lastProd.id) + 1;
         const data = req.body;
-        // res.json({ data: data });
+        const file = req.file;
         if (data !== '') {
           data.id = newProdId;
+          data.thumbnail = file.path;
           products.push(data);
           await postProduct(products);
           res.json({ prodId: newProdId });
         } else {
-          res.json('Error: No product data found');
+          res.json({ error: 'producto no encontrado' });
         }
       } catch (err) {
         res.status(400).json(err);

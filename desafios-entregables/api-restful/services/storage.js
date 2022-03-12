@@ -9,12 +9,12 @@ const FILE_TYPE_MAP = {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './uploads');
+    cb(null, './public/uploads');
   },
   filename: (req, file, cb) => {
-    const filename = file.originalname.replace(' ', '-');
+    const filename = file.originalname;
     const extension = FILE_TYPE_MAP[file.mimetype];
-    cb(null, `${filename}-${Date.now()}.${extension}`);
+    cb(null, filename);
   },
 });
 
