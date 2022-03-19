@@ -54,7 +54,7 @@ router
     (async () => {
       try {
         const products = await getProducts();
-        res.render('product', {
+        res.render('pages/product', {
           products,
         });
       } catch (err) {
