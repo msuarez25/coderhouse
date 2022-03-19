@@ -56,6 +56,7 @@ router
         const products = await getProducts();
         res.render('product', {
           products,
+          title: 'Productos',
         });
       } catch (err) {
         res.status(400).json(err);
