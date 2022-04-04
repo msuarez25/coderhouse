@@ -1,4 +1,4 @@
-const multer = require('multer');
+import multer from 'multer';
 
 const FILE_TYPE_MAP = {
   // mime type
@@ -18,4 +18,4 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = storage;
+export default storage;

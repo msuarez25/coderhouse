@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 import upload from '../middlewares/uploadFile.js';
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.post('/uploadFile', upload.single('myFile'), (req, res, next) => {
   }
   res.send(file);
 });
-module.exports = router;
+export default router;

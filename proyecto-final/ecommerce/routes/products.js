@@ -1,52 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const upload = require('../middlewares/uploadFiles');
+import express from 'express';
 const router = express.Router();
-const fs = require('fs');
-const { dirname } = require('path');
-const fsp = fs.promises; // usamos el modulo de promesas para asegurarnos que todos los metodos se corren de manera asincrona
+import bodyParser from 'body-parser';
+import upload from '../middlewares/uploadFiles.js';
+import logger from '../middlewares/logger.js';
+import { v4 as uuidv4 } from 'uuid'; // usamos para generar codigos unicos
+import { postProduct, getProducts } from '../services/fsFunctions.js';
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
-//router.use(upload.array());
-
-const postProduct = async (data) => {
-  try {
-    // leemos el archivo productos.json y lo guardamos su contenido en una variable
-    await fsp.writeFile(
-      './services/productos.json',
-      JSON.stringify(data),
-      'utf-8',
-      (error) => {
-        // en caso de error en la lectura del archivo aparecerá este mensaje
-        if (error) throw `error: error de escritura, ${error.toString()}`;
-      }
-    );
-    // Retorna la respuesta objeto js como json
-    return true;
-  } catch (error) {
-    // el bloque catch sirve para atajar cualquier error y mostrarlo en la consola
-    return error;
-  }
-};
-const getProducts = async () => {
-  try {
-    // leemos el archivo productos.json y lo guardamos su contenido en una variable
-    const fileBuffer = await fsp.readFile(
-      './services/productos.json',
-      'utf8',
-      (error) => {
-        // en caso de error en la lectura del archivo aparecerá este mensaje
-        if (error) throw `error: error de lectura, ${error.toString()}`;
-      }
-    );
-    // Retorna la respuesta objeto js como json
-    return JSON.parse(fileBuffer);
-  } catch (error) {
-    // el bloque catch sirve para atajar cualquier error y mostrarlo en la consola
-    return error;
-  }
-};
 
 router
   .route('/')
@@ -60,21 +21,25 @@ router
       }
     })();
   })
-
-  .post(upload.single('uploaded_file'), (req, res) => {
+  .post(logger, upload.single('foto'), (req, res) => {
     (async () => {
       try {
         const products = await getProducts();
-        const lastProd = products.at(-1);
-        const newProdId = parseInt(lastProd.id) + 1;
+        const maxId = products.reduce(
+          (max, product) => (product.id > max ? product.id : max),
+          products[0].id
+        );
+        const newProdId = parseInt(maxId) + 1;
         const data = req.body;
         const file = req.file;
         if (data !== '') {
           data.id = newProdId;
-          data.thumbnail = file.path;
+          data.timestamp = Date.now();
+          data.code = `prod-${uuidv4()}`;
+          data.foto = file.path.replace('public', '');
           products.push(data);
           await postProduct(products);
-          res.json({ prodId: newProdId });
+          res.redirect(`/productos/?prodId=newProdId`);
         } else {
           res.json({ error: 'producto no encontrado' });
         }
@@ -105,7 +70,7 @@ router
       }
     })();
   })
-  .put((req, res) => {
+  .put(logger, (req, res) => {
     (async () => {
       try {
         const products = await getProducts();
@@ -131,7 +96,7 @@ router
       }
     })();
   })
-  .delete((req, res) => {
+  .delete(logger, (req, res) => {
     (async () => {
       try {
         const products = await getProducts();
@@ -156,4 +121,4 @@ router
     })();
   });
 
-module.exports = router;
+export default router;
