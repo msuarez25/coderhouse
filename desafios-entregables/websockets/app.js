@@ -1,18 +1,21 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const http = require('http');
-const bodyParser = require('body-parser');
-const upload = require('./middlewares/uploadFiles');
-const fs = require('fs');
+import express from 'express';
+import fetch from 'node-fetch';
+import http from 'http';
+import bodyParser from 'body-parser';
+import fs from 'fs';
 const fsp = fs.promises; // usamos el modulo de promesas para asegurarnos que todos los metodos se corren de manera asincrona
 const app = express();
 const defaultPort = 8080;
 const port = process.env.port || defaultPort;
-const moment = require('moment');
-const { engine } = require('express-handlebars');
+import moment from 'moment';
+import { engine } from 'express-handlebars';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+import knex from './DB/db.js';
 
 const server = http.createServer(app);
-const { Server } = require('socket.io');
+import { Server } from 'socket.io';
 // const cors = require('cors');
 
 const io = new Server(server);
@@ -24,39 +27,19 @@ app.use(express.static('public'));
 
 const postProduct = async (data) => {
   try {
-    // leemos el archivo productos.json y lo guardamos su contenido en una variable
-    await fsp.writeFile(
-      './services/productos.json',
-      JSON.stringify(data),
-      'utf-8',
-      (error) => {
-        // en caso de error en la lectura del archivo aparecerá este mensaje
-        if (error) throw `error: error de escritura, ${error.toString()}`;
-      }
-    );
-    // Retorna la respuesta objeto js como json
+    await knex.insert(data).from('productos');
     return true;
   } catch (error) {
-    // el bloque catch sirve para atajar cualquier error y mostrarlo en la consola
-    return error;
+    console.log(error);
   }
 };
 const getProducts = async () => {
   try {
-    // leemos el archivo productos.json y lo guardamos su contenido en una variable
-    const fileBuffer = await fsp.readFile(
-      './services/productos.json',
-      'utf8',
-      (error) => {
-        // en caso de error en la lectura del archivo aparecerá este mensaje
-        if (error) throw `error: error de lectura, ${error.toString()}`;
-      }
-    );
-    // Retorna la respuesta objeto js como json
-    return JSON.parse(fileBuffer);
+    const productos = await knex.select().from('productos');
+    console.log(productos);
+    return productos;
   } catch (error) {
-    // el bloque catch sirve para atajar cualquier error y mostrarlo en la consola
-    return error;
+    console.log(error);
   }
 };
 const postMessage = async (data) => {
@@ -80,21 +63,14 @@ const postMessage = async (data) => {
 };
 const getMessages = async () => {
   try {
-    // leemos el archivo Messageos.json y lo guardamos su contenido en una variable
-    const fileBuffer = await fsp.readFile(
-      './services/mensajes.json',
-      'utf8',
-      (error) => {
-        // en caso de error en la lectura del archivo aparecerá este mensaje
-        if (error) throw `error: error de lectura, ${error.toString()}`;
-      }
-    );
-    // Retorna la respuesta objeto js como json
-    return JSON.parse(fileBuffer);
+    const mensajes = await knex.select().from('mensajes');
+    return mensajes;
   } catch (error) {
-    // el bloque catch sirve para atajar cualquier error y mostrarlo en la consola
-    return error;
+    console.log(error);
   }
+  // finally {
+  //   knex.destroy();
+  // }
 };
 
 app
@@ -116,14 +92,9 @@ app
   .post((req, res) => {
     (async () => {
       try {
-        const products = await getProducts();
-        const lastProd = products.at(-1);
-        const newProdId = parseInt(lastProd.id) + 1;
         const data = req.body;
         if (data && Object.keys(data).length !== 0) {
-          data.id = newProdId;
-          products.push(data);
-          await postProduct(products);
+          await postProduct(data);
           const newProducts = await getProducts();
           console.log(newProducts);
           res.json(newProducts);
@@ -139,22 +110,24 @@ app
 app.route('/mensajes').post((req, res) => {
   (async () => {
     try {
-      const messages = await getMessages();
       const data = req.body;
       if (Object.keys(data).length !== 0) {
         data.date = moment().format('DD/MM/YYYY HH:MM:SS');
-        console.log('data2', data);
-        messages.push(data);
-        await postMessage(messages);
+        console.log('mydata: ', data);
+        const response = await knex.insert(data).from('mensajes');
+        console.log('✔ Mensaje agregado');
+        console.log(response);
         const newMessages = await getMessages();
-        console.log(newMessages);
         res.json(newMessages);
       } else {
-        res.json({ error: 'producto no encontrado' });
+        res.json({ error: 'Tu mensaje no pudo ser agregado' });
       }
-    } catch (err) {
-      res.status(400).json({ error: err });
+    } catch (error) {
+      console.log(error);
     }
+    // finally {
+    //   knex.destroy();
+    // }
   })();
 });
 
