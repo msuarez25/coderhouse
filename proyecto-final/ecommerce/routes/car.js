@@ -92,7 +92,7 @@ router
           await postProdCar(carritosExclID);
           res.json(carritosExclID);
         } else {
-          res.json({ error: 'carrito no encontrado' });
+          res.status(400).json({ error: 'carrito no encontrado' });
         }
       } catch (err) {
         res.status(400).json(err);
@@ -110,14 +110,14 @@ router.route('/:id/productos').get((req, res) => {
         if (carritoById.length > 0) {
           res.json(carritoById);
         } else {
-          res.json({ error: 'producto no encontrado' });
+          res.status(400).json({ error: 'producto no encontrado' });
         }
       } catch (err) {
         res.status(400).json(err);
       }
     })();
   } else {
-    res.json({ error: 'El usuario no tiene carrito asignando' });
+    res.status(400).json({ error: 'El usuario no tiene carrito asignando' });
   }
 });
 
@@ -142,7 +142,9 @@ router
             await postProdCar(carritos);
             res.json(carritos);
           } else {
-            res.json({ error: 'El producto no ha sido agragado al carrito' });
+            res
+              .status(400)
+              .json({ error: 'El producto no ha sido agragado al carrito' });
           }
         } catch (err) {
           res.status(400).json(err);
@@ -175,10 +177,10 @@ router
             await postProdCar(carritos);
             res.json(carritos);
           } else {
-            res.json({ error: 'producto no encontrado' });
+            res.status(400).json({ error: 'producto no encontrado' });
           }
         } else {
-          res.json({ error: 'carrito no encontrado' });
+          res.status(400).json({ error: 'carrito no encontrado' });
         }
       } catch (err) {
         res.status(400).json(err);
