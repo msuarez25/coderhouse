@@ -159,7 +159,7 @@ const displayCarritoHTML = (products, pContainer) => {
   pContainer.innerHTML = '';
   let total = 0;
   products.map((product) => {
-    total = total + product.precio;
+    total = total + parseInt(product.precio);
     let card = `<div class="col-12 mt-5">
               <div class="row align-items-center">
                 <div class="col-md-2">

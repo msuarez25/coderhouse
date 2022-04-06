@@ -53,30 +53,52 @@ router
     })();
   });
 
-router.route('/:id').delete(logger, (req, res) => {
-  (async () => {
-    try {
-      const products = await getProdCar();
-      const prodID = parseInt(req.params.id);
-      const data = req.body;
-      const productsExist = products.filter((obj) => {
-        return parseInt(obj.id) === prodID;
-      });
-
-      if (data !== '' && productsExist.length > 0) {
-        const productsExclID = products.filter((obj) => {
-          return parseInt(obj.id) !== prodID;
+router
+  .route('/:id')
+  .get(logger, (req, res) => {
+    (async () => {
+      try {
+        const products = await getProdCar();
+        const prodID = parseInt(req.params.id);
+        const productsExist = products.filter((obj) => {
+          return parseInt(obj.id) === prodID;
         });
-        await postProdCar(productsExclID);
-        res.json(productsExclID);
-      } else {
-        res.json({ error: 'producto no encontrado' });
+
+        if (productsExist.length > 0) {
+          res.json(productsExist);
+        } else {
+          res.json({
+            error: 'Tu carrito no fue encontrado',
+          });
+        }
+      } catch (err) {
+        res.status(400).json(err);
       }
-    } catch (err) {
-      res.status(400).json(err);
-    }
-  })();
-});
+    })();
+  })
+  .delete(logger, (req, res) => {
+    (async () => {
+      try {
+        const carritos = await getProdCar();
+        const carId = parseInt(req.params.id);
+        const carritoExist = carritos.filter((obj) => {
+          return parseInt(obj.id) === carId;
+        });
+
+        if (carritoExist.length > 0) {
+          const carritosExclID = carritos.filter((obj) => {
+            return parseInt(obj.id) !== carId;
+          });
+          await postProdCar(carritosExclID);
+          res.json(carritosExclID);
+        } else {
+          res.json({ error: 'carrito no encontrado' });
+        }
+      } catch (err) {
+        res.status(400).json(err);
+      }
+    })();
+  });
 
 router.route('/:id/productos').get((req, res) => {
   const carritoId = req.params.id;
@@ -111,7 +133,7 @@ router
           const productById = products.filter((i) => prodId.includes(i.id));
           const carritos = await getProdCar();
 
-          if (carritoId && carritoId) {
+          if (carritoId && productById.length !== 0 && carritos) {
             carritos.forEach((carrito) => {
               if (carrito.id == carritoId) {
                 carrito.productos.push(productById[0]);
@@ -136,22 +158,27 @@ router
         const carritos = await getProdCar();
         const carId = parseInt(req.params.id);
         const prodId = parseInt(req.params.id_prod);
-
-        if (carritos && carId && prodId) {
-          carritos.every((carrito, index) => {
-            if (carrito.id == carId) {
-              console.log(carrito.productos);
-              carritos[index].productos = carrito.productos.filter(
-                (prod) => prod.id !== prodId
-              );
-              return false;
-            }
-            return true;
-          });
-          await postProdCar(carritos);
-          res.json(carritos);
+        const carExist = carritos.filter((obj) => {
+          return parseInt(obj.id) === carId;
+        });
+        if (carExist.length !== 0) {
+          if (carritos && carId && prodId) {
+            carritos.every((carrito, index) => {
+              if (carrito.id == carId) {
+                carritos[index].productos = carrito.productos.filter(
+                  (prod) => prod.id !== prodId
+                );
+                return false;
+              }
+              return true;
+            });
+            await postProdCar(carritos);
+            res.json(carritos);
+          } else {
+            res.json({ error: 'producto no encontrado' });
+          }
         } else {
-          res.json({ error: 'producto no encontrado' });
+          res.json({ error: 'carrito no encontrado' });
         }
       } catch (err) {
         res.status(400).json(err);
