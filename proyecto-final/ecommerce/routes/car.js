@@ -58,14 +58,14 @@ router
   .get(logger, (req, res) => {
     (async () => {
       try {
-        const products = await getProdCar();
-        const prodID = parseInt(req.params.id);
-        const productsExist = products.filter((obj) => {
-          return parseInt(obj.id) === prodID;
+        const carritos = await getProdCar();
+        const carId = parseInt(req.params.id);
+        const carritosExist = carritos.filter((obj) => {
+          return parseInt(obj.id) === carId;
         });
 
-        if (productsExist.length > 0) {
-          res.json(productsExist);
+        if (carritosExist.length > 0) {
+          res.json(carritosExist);
         } else {
           res.json({
             error: 'Tu carrito no fue encontrado',
@@ -90,7 +90,7 @@ router
             return parseInt(obj.id) !== carId;
           });
           await postProdCar(carritosExclID);
-          res.json(carritosExclID);
+          res.json({ success: 'Carrito eliminado exitosamente!' });
         } else {
           res.status(400).json({ error: 'carrito no encontrado' });
         }

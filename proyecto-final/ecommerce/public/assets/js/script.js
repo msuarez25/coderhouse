@@ -1,3 +1,7 @@
+// Envia valor en el header de autorizacion.
+// const isAdmin = ''; // no admin
+const isAdmin = '1'; //admin;
+
 //revisar si el usuario tiene un carrito asignado, sino lo crea y lo guarda en el localStorage
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -12,6 +16,7 @@ const checkCarId = async () => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        myauthorization: isAdmin,
       },
     };
     try {
@@ -72,6 +77,7 @@ const postCarData = async (url = false, method = 'POST') => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          myauthorization: isAdmin,
         },
       };
       try {
@@ -94,6 +100,7 @@ const getCarData = async (url = false) => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          myauthorization: isAdmin,
         },
       };
       try {

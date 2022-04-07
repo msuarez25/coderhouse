@@ -1,7 +1,10 @@
 const logger = (req, res, next) => {
-  // const isAdmin = false; // your are not admin
-  const isAdmin = true; // your are admin
-  if (isAdmin) {
+  console.log(req.headers.myauthorization);
+  if (
+    req.headers.myauthorization !== '' &&
+    req.headers.myauthorization !== null &&
+    req.headers.myauthorization !== undefined
+  ) {
     next();
   } else {
     res.status(401).json({
