@@ -1,5 +1,5 @@
 import express from 'express';
-import upload from '../middlewares/uploadFile.js';
+import upload from '../middlewares/uploadFiles.js';
 const router = express.Router();
 
 router.post('/uploadFile', upload.single('myFile'), (req, res, next) => {

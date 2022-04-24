@@ -1,11 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import bodyParser from 'body-parser';
-import {
-  getProducts,
-  postProdCar,
-  getProdCar,
-} from '../services/fsFunctions.js';
+import { getProducts, postProdCar, getProdCar } from '../utils/fsFunctions.js';
 import logger from '../middlewares/logger.js';
 
 router.use(bodyParser.json());
