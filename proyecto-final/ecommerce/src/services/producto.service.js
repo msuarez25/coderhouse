@@ -20,7 +20,7 @@ export default class ProductoService {
 
   async getProducto(id) {
     if (id) {
-      return await ProductoModule.find({ _id: id });
+      return await ProductoModule.findOne({ _id: id });
     } else {
       return await ProductoModule.find();
     }

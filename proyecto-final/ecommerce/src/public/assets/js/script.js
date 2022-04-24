@@ -146,8 +146,8 @@ const displayCarrito = async (container) => {
       const response = await fetch(`/api/carrito/${userCarId}/productos`);
       if (response.status === 200) {
         const carProducts = await response.json();
-        console.log(carProducts[0]);
-        const products = carProducts[0].productos;
+        console.log(carProducts);
+        const products = carProducts;
         if (products.length > 0) {
           displayCarritoHTML(products, pContainer);
         } else {
