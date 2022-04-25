@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Get, Post, Put y Delete</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="text-center">Añadir Producto</h1>
+      <div class="d-flex justify-content-center">
+        <div class="col-12 col-md-6">
+          <form
+            id="add-product"
+            method="POST"
+            action="/api/productos"
+            enctype="multipart/form-data"
+          >
+            <div class="mb-3">
+              <label for="title" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="title" name="title" />
+            </div>
+            <div class="mb-3">
+              <label for="price" class="form-label">Precio</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                name="price"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="Thumbnail" class="form-label">Imagen</label>
+              <input
+                class="form-control"
+                type="file"
+                id="uploaded_file"
+                name="uploaded_file"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

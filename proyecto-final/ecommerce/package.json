@@ -1,0 +1,39 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.1",
+  "description": "Segunda Entrega Final",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "node ./node_modules/nodemon/bin/nodemon.js -e js --exec \" npm run start || exit 1\"",
+    "start": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msuarez25/coderhouse.git#main"
+  },
+  "keywords": [
+    "api",
+    "rest",
+    "restful"
+  ],
+  "author": "Mauricio Suarez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msuarez25/coderhouse/issues"
+  },
+  "homepage": "https://github.com/msuarez25/coderhouse/tree/main#readme",
+  "devDependencies": {
+    "@faker-js/faker": "^6.2.0",
+    "dotenv": "^16.0.0",
+    "eslint": "^8.14.0",
+    "firebase-admin": "^10.0.2",
+    "multer": "^1.4.4",
+    "nodemon": "^2.0.15",
+    "uuid": "^8.3.2"
+  },
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}

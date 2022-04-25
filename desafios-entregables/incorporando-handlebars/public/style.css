@@ -1,0 +1,13 @@
+@import './bootstrap.min.css';
+
+.table img {
+  max-width: 100px;
+}
+
+header .nav-item {
+  list-style-type: none;
+}
+
+header .nav-link {
+  color: #fff;
+}

@@ -1,0 +1,31 @@
+{
+  "name": "servidor-con-express",
+  "version": "1.0.0",
+  "description": "Desafio de coderhouse, \"Servidor con express\". Parte de Backend Development Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "node ./node_modules/nodemon/bin/nodemon.js -e js --exec \" npm run start || exit 1\"",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msuarez25/coderhouse.git"
+  },
+  "keywords": [
+    "servidor",
+    "server",
+    "express",
+    "nodejs"
+  ],
+  "author": "Mauricio Suarez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msuarez25/coderhouse/issues"
+  },
+  "homepage": "https://github.com/msuarez25/coderhouse#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  }
+}
