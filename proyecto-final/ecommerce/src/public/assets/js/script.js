@@ -22,7 +22,7 @@ const checkCarId = async () => {
     try {
       const response = await fetch('/api/carrito', settings);
       const data = await response.json();
-      localStorage.setItem('userCarId', data.id);
+      localStorage.setItem('userCarId', data._id);
     } catch (e) {
       console.error(e);
     }
@@ -49,9 +49,9 @@ const displayProducts = async (container) => {
             <div class="card-body">
               <h5 class="card-title">${product.nombre}</h5>
               <p class="card-text">Código del producto: ${product.code}</p>
-              <button data-prod-id="${product.id}" class="btn btn-primary add-to-cart mb-3" >Agregar al carrito</button>
-              <a href="/editar/${product.id}" class="btn btn-warning edit-product mb-3">Editar producto</a>
-              <button data-prod-id="${product.id}" class="btn btn-danger delete-product mb-3" >Eliminar producto</button>
+              <button data-prod-id="${product._id}" class="btn btn-primary add-to-cart mb-3" >Agregar al carrito</button>
+              <a href="/editar/${product._id}" class="btn btn-warning edit-product mb-3">Editar producto</a>
+              <button data-prod-id="${product._id}" class="btn btn-danger delete-product mb-3" >Eliminar producto</button>
             </div>
             <div class="card-footer text-muted">
                 Precio: ${product.precio}
@@ -146,8 +146,8 @@ const displayCarrito = async (container) => {
       const response = await fetch(`/api/carrito/${userCarId}/productos`);
       if (response.status === 200) {
         const carProducts = await response.json();
-        console.log(carProducts[0]);
-        const products = carProducts[0].productos;
+        console.log(carProducts);
+        const products = carProducts;
         if (products.length > 0) {
           displayCarritoHTML(products, pContainer);
         } else {
@@ -180,7 +180,7 @@ const displayCarritoHTML = (products, pContainer) => {
                   Precio: ${product.precio}
                 </div>
                 <div class="col-md-2">
-                <button data-prod-id="${product.id}" class="btn btn-danger remove-from-cart">X</a>
+                <button data-prod-id="${product._id}" class="btn btn-danger remove-from-cart">X</a>
                 </div>
               </div>
               </div>`;
