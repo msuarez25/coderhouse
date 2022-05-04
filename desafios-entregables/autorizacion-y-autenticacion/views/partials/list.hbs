@@ -1,0 +1,24 @@
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Precio</th>
+      <th scope="col">Foto</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+        <td>
+            {{this.nombre}}
+        </td>
+        <td>
+            ${{this.precio}}
+        </td>
+        <td>
+            <img src="{{this.foto}}" alt="imagen de {{this.nombre}}">
+        </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
