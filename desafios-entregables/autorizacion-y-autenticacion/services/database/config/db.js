@@ -3,4 +3,12 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-mongoose.connect(process.env.mongo_db_uri);
+mongoose.connect(process.env.MONGO_URI, (err) => {
+  if (err) {
+    console.log('❌ Error:' + err);
+  } else {
+    console.log('🚀 Connected to MongoDB');
+  }
+});
+
+export default mongoose;

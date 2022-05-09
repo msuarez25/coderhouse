@@ -2,11 +2,14 @@
     <div class="d-flex justify-content-center">
         <div class="col-12 col-md-6 col-lg-4 p-5 bg-light shadow rounded">
             <h1>Login de Usuario</h1>
-            <form id="login" action="/api/login" method="POST">
-                <label for="nombre" class="form-label">Ingrese su Nombre</label>
-                <input type="text" class="form-control mb-3" placeholder="Tu nombre aqui..." name="nombre" id="nombre">
+            <form id="login" action="/login" method="post" class="mb-5">
+                <label for="username" class="form-label">Ingrese su Usuario</label>
+                <input type="text" class="form-control mb-3" placeholder="Tu usuario aqui..." name="username" id="username">
+                <label for="password" class="form-label">Ingrese su Contraseña</label>
+                <input type="password" class="form-control mb-3" placeholder="Tu constraseña aqui..." name="password" id="password">
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
+            <p>Si no tienes usuario puedes <a href="/register">registrarte aquí</a></p>
         </div>
     </div>
 </div>

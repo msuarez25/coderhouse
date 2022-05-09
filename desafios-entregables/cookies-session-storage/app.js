@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import http from 'http';
 import bodyParser from 'body-parser';
 import fs from 'fs';
+import './services/database/config/db.js';
 import { MensajeModule } from './services/database/modules/mensajes.modules.js';
 import generateProductos from './utils/productos.utils.js';
 import generateMensajes from './utils/mensajes.utils.js';
@@ -15,54 +16,37 @@ import { engine } from 'express-handlebars';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const server = http.createServer(app);
+import { Server } from 'socket.io';
 
 import dotenv from 'dotenv';
 import session from 'express-session';
+import mongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 dotenv.config();
+import { auth } from './middlewares/auth.middleware.js';
 
-import './services/database/config/db.js';
-import AuthRouter from './routes/auth.router.js';
-import passport from './utils/passport.util.js';
-import * as AuthMiddleware from './middlewares/auth.middleware.js';
-
-const server = http.createServer(app);
-import { Server } from 'socket.io';
 const io = new Server(server);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cookieParser(process.env.SECRET));
-
 app.use(
   session({
+    store: new mongoStore({
+      mongoUrl: process.env.MONGO_URI,
+      options: {
+        userNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    }),
     secret: process.env.SECRET,
-    cookie: {
-      maxAge: Number(process.env.EXPIRE),
-    },
-    rolling: true,
+    cookie: { expires: 60000 },
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
-
-app.set('views', './views');
-app.set('view engine', 'hbs');
-
-app.engine(
-  'hbs',
-  engine({
-    extname: '.hbs',
-    defaultLayout: 'index.hbs',
-    layoutsDir: __dirname + '/views/layouts',
-    partialsDir: __dirname + '/views/partials',
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/', AuthRouter);
 
 const postProduct = async (data) => {
   try {
@@ -136,21 +120,21 @@ const getMessages = async () => {
   }
 };
 
-// app.get('/api/productos-test', (req, res) => {
-//   (async () => {
-//     try {
-//       const products = await getFakeProducts();
-//       const messages = await getMessages();
-//       res.render('producto-test', {
-//         products,
-//         messages,
-//         url: 'http://localhost:8080',
-//       });
-//     } catch (err) {
-//       res.status(400).json(err);
-//     }
-//   })();
-// });
+app.get('/api/productos-test', (req, res) => {
+  (async () => {
+    try {
+      const products = await getFakeProducts();
+      const messages = await getMessages();
+      res.render('producto-test', {
+        products,
+        messages,
+        url: 'http://localhost:8080',
+      });
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  })();
+});
 
 app.get('/api/mensajes-test', (req, res) => {
   (async () => {
@@ -164,7 +148,7 @@ app.get('/api/mensajes-test', (req, res) => {
   })();
 });
 
-app.get('/', AuthMiddleware.checkAuthentication, (req, res) => {
+app.get('/', auth, (req, res) => {
   (async () => {
     try {
       // const products = await getProducts();
@@ -184,13 +168,11 @@ app.get('/', AuthMiddleware.checkAuthentication, (req, res) => {
         });
       });
 
-      const nombre = req.signedCookies.user.nombre;
-      const email = req.signedCookies.user.email;
+      const nombre = req.signedCookies.nombre;
 
       res.render('main', {
         messages,
         nombre,
-        email,
       });
     } catch (err) {
       res.status(400).json(err);
@@ -198,50 +180,50 @@ app.get('/', AuthMiddleware.checkAuthentication, (req, res) => {
   })();
 });
 
-// app.get('/login', (req, res) => {
-//   (async () => {
-//     try {
-//       res.render('login');
-//     } catch (err) {
-//       res.status(400).json(err);
-//     }
-//   })();
-// });
+app.get('/login', (req, res) => {
+  (async () => {
+    try {
+      res.render('login');
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  })();
+});
 
-// app.post('/api/login', (req, res) => {
-//   (async () => {
-//     try {
-//       const { nombre } = req.body;
-//       if (nombre !== null) {
-//         req.session.login = true;
-//         res
-//           .clearCookie('nombre')
-//           .cookie('nombre', nombre, { maxAge: 600000, signed: true })
-//           .redirect('/');
-//       } else {
-//         res
-//           .status(400)
-//           .send('Hubo un error en su sesión, por favor intentelo de nuevo.');
-//       }
-//     } catch (err) {
-//       res.status(400).json(err);
-//     }
-//   })();
-// });
+app.post('/api/login', (req, res) => {
+  (async () => {
+    try {
+      const { nombre } = req.body;
+      if (nombre !== null) {
+        req.session.login = true;
+        res
+          .clearCookie('nombre')
+          .cookie('nombre', nombre, { maxAge: 600000, signed: true })
+          .redirect('/');
+      } else {
+        res
+          .status(400)
+          .send('Hubo un error en su sesión, por favor intentelo de nuevo.');
+      }
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  })();
+});
 
-// app.get('/logout', (req, res, next) => {
-//   // Leer cookie para el nombre
-//   const nombre = req.signedCookies.nombre;
-//   req.session.destroy((err) => {
-//     if (!err) {
-//       res.status(200).clearCookie('nombre').render('bye', {
-//         nombre,
-//       });
-//     } else {
-//       res.json(err);
-//     }
-//   });
-// });
+app.get('/logout', (req, res, next) => {
+  // Leer cookie para el nombre
+  const nombre = req.signedCookies.nombre;
+  req.session.destroy((err) => {
+    if (!err) {
+      res.status(200).clearCookie('nombre').render('bye', {
+        nombre,
+      });
+    } else {
+      res.json(err);
+    }
+  });
+});
 
 app.post('/mensajes', (req, res) => {
   // console.log(req.body);
@@ -322,6 +304,19 @@ io.on('connection', (socket) => {
     })();
   });
 });
+
+app.set('views', './views');
+app.set('view engine', 'hbs');
+
+app.engine(
+  'hbs',
+  engine({
+    extname: '.hbs',
+    defaultLayout: 'index.hbs',
+    layoutsDir: __dirname + '/views/layouts',
+    partialsDir: __dirname + '/views/partials',
+  })
+);
 
 server.listen(port, (err) => {
   if (err) {

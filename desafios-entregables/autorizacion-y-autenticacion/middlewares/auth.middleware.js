@@ -1,7 +1,7 @@
-export function auth(req, res, next) {
-  if (req.session.login) {
+export function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
     next();
   } else {
-    return res.redirect('/login');
+    res.redirect('/login');
   }
 }

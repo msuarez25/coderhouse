@@ -1,0 +1,21 @@
+<div class="container py-5">
+    <div class="d-flex justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4 p-5 bg-light shadow rounded">
+            <h1>Registro de Usuario</h1>
+            <form id="registro" action="/register" method="post" class="mb-5">
+                <label for="username" class="form-label">Ingrese su usuario</label>
+                <input type="text" class="form-control mb-3" placeholder="Tu usuario aqui..." name="username" id="username">
+                <label for="password" class="form-label">Ingrese su password</label>
+                <input type="password" class="form-control mb-3" placeholder="Tu password aqui..." name="password" id="password">
+                <label for="firstName" class="form-label">Ingrese su Nombre</label>
+                <input type="text" class="form-control mb-3" placeholder="Tu nombre aqui..." name="firstName" id="firstName">
+                <label for="lastName" class="form-label">Ingrese su Apellido</label>
+                <input type="text" class="form-control mb-3" placeholder="Tu Apellido aqui..." name="lastName" id="lastName">     
+                <label for="email" class="form-label">Ingrese su Email</label>
+                <input type="email" class="form-control mb-3" placeholder="Tu email aqui..." name="email" id="email">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+            <p>Si ya tienes un usuario puedes <a href="/login">loguearte aquí</a></p>
+        </div>
+    </div>
+</div>

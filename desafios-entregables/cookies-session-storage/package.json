@@ -41,9 +41,6 @@
     "node-fetch": "2.0",
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.1",
-    "sqlite3": "^5.0.2",
-    "bcrypt": "^5.0.1",
-    "passport": "^0.5.2",
-    "passport-local": "^1.0.0"
+    "sqlite3": "^5.0.2"
   }
 }
