@@ -10,7 +10,7 @@ var formatter = new Intl.NumberFormat('en-US', {
 });
 const checkCarId = async () => {
   const userCarId = localStorage.getItem('userCarId');
-  if (userCarId == null) {
+  if (userCarId == null || userCarId == undefined) {
     const settings = {
       method: 'POST',
       headers: {
@@ -22,7 +22,7 @@ const checkCarId = async () => {
     try {
       const response = await fetch('/api/carrito', settings);
       const data = await response.json();
-      localStorage.setItem('userCarId', data._id);
+      localStorage.setItem('userCarId', data[0]._id);
     } catch (e) {
       console.error(e);
     }
@@ -146,7 +146,7 @@ const displayCarrito = async (container) => {
       const response = await fetch(`/api/carrito/${userCarId}/productos`);
       if (response.status === 200) {
         const carProducts = await response.json();
-        console.log(carProducts);
+        // console.log(carProducts);
         const products = carProducts;
         if (products.length > 0) {
           displayCarritoHTML(products, pContainer);

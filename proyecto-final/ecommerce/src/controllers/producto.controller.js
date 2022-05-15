@@ -44,9 +44,9 @@ export default class ProductoController {
 
   async addProducto(req, res) {
     const data = req.body;
-    console.log('data:', data);
-    // const file = req.file;
-    const response = await this.productoService.addProducto(data);
+    // console.log('data:', data);
+    const file = req.file;
+    const response = await this.productoService.addProducto(data, file);
     if (response) {
       res.redirect(`/productos/?prodId=${response}`);
     } else {

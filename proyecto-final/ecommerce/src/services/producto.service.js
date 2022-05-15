@@ -26,11 +26,11 @@ export default class ProductoService {
     }
   }
 
-  async addProducto(data) {
+  async addProducto(data, file) {
     if (data !== '') {
       data.timestamp = Date.now();
       data.code = v4();
-      //   data.foto = file.path.replace('public', '');
+      data.foto = file.path.replace('src/public', '');
       return await ProductoModule.create(data);
     }
     return false;

@@ -1,8 +1,6 @@
 import '../database/config/db.js';
 import { CarModule } from '../database/modules/cars.modules.js';
 import ProductoService from '../services/producto.service.js';
-import mongoose from 'mongoose';
-import { response } from 'express';
 
 export default class CarService {
   constructor() {
