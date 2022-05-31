@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 const app = express();
 import apiRouter from './routes/index.route.js';
 import InfoRoute from './routes/info.route.js';
-import minimist from 'minimist';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -61,10 +60,9 @@ const options = {
     p: 'PORT',
   },
 };
-// check if args bring port
-const args = minimist(process.argv.slice(2), options);
+
 // set port
-const PORT = args.PORT;
+const PORT = process.argv[2] || 3000;
 
 app.listen(PORT, (err) => {
   if (err) {
