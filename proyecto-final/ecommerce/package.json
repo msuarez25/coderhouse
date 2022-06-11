@@ -48,6 +48,7 @@
     "uuid": "^8.3.2"
   },
   "dependencies": {
+    "compression": "^1.7.4",
     "express": "^4.17.2",
     "forever": "^4.0.3",
     "pm2": "^5.2.0"

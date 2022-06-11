@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import { engine } from 'express-handlebars';
 import bodyParser from 'body-parser';
 const app = express();
@@ -8,6 +9,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
