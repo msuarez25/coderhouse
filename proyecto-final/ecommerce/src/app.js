@@ -7,9 +7,10 @@ import apiRouter from './routes/index.route.js';
 import InfoRoute from './routes/info.route.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import logger from './utils/loggers.js';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -52,6 +53,13 @@ app.get('/agregar', (req, res) => {
 
 // info
 app.use('/info', new InfoRoute());
+app.use('/info-gzip', compression(), new InfoRoute());
+
+// 404
+app.use((req, res) => {
+  logger.log('warn', { ruta: req.url, metodo: req.method });
+  res.status(400).json({ error: 'Pagina no encontrada' });
+});
 
 // Set Default port and alias for PORT
 const options = {

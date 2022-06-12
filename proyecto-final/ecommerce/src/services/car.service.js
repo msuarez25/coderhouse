@@ -1,6 +1,7 @@
 import '../database/config/db.js';
 import { CarModule } from '../database/modules/cars.modules.js';
 import ProductoService from '../services/producto.service.js';
+import logger from '../utils/loggers.js';
 
 export default class CarService {
   constructor() {
@@ -10,8 +11,8 @@ export default class CarService {
   async addCar() {
     try {
       return await CarModule.create([[]]);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      logger.log('error', error.message);
     }
   }
 
@@ -19,7 +20,7 @@ export default class CarService {
     try {
       return await CarModule.deleteOne({ _id: id });
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -29,7 +30,7 @@ export default class CarService {
       console.log(car.productos);
       return car.productos;
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -45,7 +46,7 @@ export default class CarService {
       }
       return false;
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -62,7 +63,7 @@ export default class CarService {
       }
       return false;
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 }

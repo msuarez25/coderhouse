@@ -1,4 +1,5 @@
 import CarService from '../services/car.service.js';
+import logger from '../utils/loggers.js';
 
 export default class CarController {
   constructor() {
@@ -16,7 +17,7 @@ export default class CarController {
       const response = await this.carService.addCar();
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -26,7 +27,7 @@ export default class CarController {
       const response = await this.carService.deleteCarById(id);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -36,7 +37,7 @@ export default class CarController {
       const response = await this.carService.getProductsFromCar(id);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -47,7 +48,7 @@ export default class CarController {
       const response = await this.carService.addProductToCarById(id, id_prod);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -60,7 +61,7 @@ export default class CarController {
       );
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 }

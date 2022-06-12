@@ -1,5 +1,6 @@
 import { fork } from 'child_process';
 const funcRandom = fork('./src/utils/random.util.js');
+import logger from '../utils/loggers.js';
 
 export default class RandomController {
   constructor() {
@@ -15,7 +16,7 @@ export default class RandomController {
       });
       funcRandom.send(cant);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 }

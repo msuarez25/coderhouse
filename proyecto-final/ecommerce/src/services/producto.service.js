@@ -3,6 +3,8 @@ import '../database/config/db.js';
 import { ProductoModule } from '../database/modules/productos.modules.js';
 import { v4 } from 'uuid';
 
+import logger from '../utils/loggers.js';
+
 export default class ProductoService {
   constructor() {}
 
@@ -43,7 +45,7 @@ export default class ProductoService {
 
       return await ProductoModule.updateOne({ _id: id }, data);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -51,7 +53,7 @@ export default class ProductoService {
     try {
       return await ProductoModule.deleteOne({ _id: id });
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 }

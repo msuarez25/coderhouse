@@ -9,8 +9,8 @@
     "watch": "node ./node_modules/nodemon/bin/nodemon.js -e js --exec \" npm run start || exit 1\"",
     "fork": "node ./node_modules/nodemon/bin/nodemon.js -e js --exec \" npm run startFork || exit 1\"",
     "cluster": "node ./node_modules/nodemon/bin/nodemon.js -e js --exec \" npm run startCluster || exit 1\"",
-    "start": "node src/app.js -p 8080",
-    "startFork": "node src/app2.js -p 8080 -m FORK",
+    "start": "node src/app.js",
+    "startFork": "node src/app2.js --prof -p 8080 -m FORK",
     "startCluster": "node src/app2.js -p 8080 -m CLUSTER",
     "forever": "forever start --minUptime 2000 --spinSleepTime 2000 -w src/app.js",
     "foreverStopAll": "forever stopall",
@@ -45,7 +45,8 @@
     "mongoose": "^6.3.1",
     "multer": "^1.4.4",
     "nodemon": "^2.0.15",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2"
   },
   "dependencies": {
     "compression": "^1.7.4",

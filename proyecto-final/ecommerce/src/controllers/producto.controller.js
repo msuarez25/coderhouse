@@ -1,4 +1,5 @@
 import ProductoService from '../services/producto.service.js';
+import logger from '../utils/loggers.js';
 
 export default class ProductoController {
   constructor() {
@@ -18,7 +19,7 @@ export default class ProductoController {
       const response = await this.productoService.createProducto(cant);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -27,7 +28,7 @@ export default class ProductoController {
       const response = await this.productoService.getProductos();
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -38,7 +39,7 @@ export default class ProductoController {
       const response = await this.productoService.getProducto(id);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -61,7 +62,7 @@ export default class ProductoController {
       const response = await this.productoService.updateProducto(id, body);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 
@@ -71,7 +72,7 @@ export default class ProductoController {
       const response = await this.productoService.deleteProducto(id);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      logger.log('error', error.message);
     }
   }
 }
