@@ -61,16 +61,6 @@ app.use((req, res) => {
   res.status(400).json({ error: 'Pagina no encontrada' });
 });
 
-// Set Default port and alias for PORT
-const options = {
-  default: {
-    PORT: '3000',
-  },
-  alias: {
-    p: 'PORT',
-  },
-};
-
 // set port
 const PORT = process.argv[2] || 3000;
 
@@ -78,5 +68,7 @@ app.listen(PORT, (err) => {
   if (err) {
     return console.log('ERROR', err);
   }
-  console.log(`Listening on port ${PORT}, http://localhost:${PORT}`);
+  console.log(
+    `Listening on port ${PORT}, http://localhost:${PORT}-PID ${process.pid}`
+  );
 });
