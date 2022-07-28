@@ -1,0 +1,14 @@
+{
+  "$schema": "https://deno.land/x/denon@2.5.0/schema.json",
+  "scripts": {
+    "start": {
+      "cmd": "deno run --allow-net --allow-env --allow-read app.tsx"
+    }
+  },
+  "compilerOptions": {
+    "types": [
+      "https://deno.land/x/servest@v1.3.4/types/react/index.d.ts",
+      "https://deno.land/x/servest@v1.3.4/types/react-dom/server/index.d.t"
+    ]
+  }
+}
